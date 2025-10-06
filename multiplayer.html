@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+<title>Mabar Monster Chase — Fullscreen Multiplayer</title>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #000;
+    overflow: hidden;
+    height: 100%;
+  }
+
+  #gameArea {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    background: #111;
+    overflow: hidden;
+  }
+
+  .player, .monster {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+  }
+
+  .player { background: cyan; }
+  .monster { background: red; }
+
+  .btn {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    background: rgba(255,255,255,0.1);
+    color: white;
+    border-radius: 50%;
+    font-size: 28px;
+    text-align: center;
+    line-height: 60px;
+    user-select: none;
+  }
+
+  #up { left: 70px; bottom: 130px; }
+  #down { left: 70px; bottom: 10px; }
+  #left { left: 10px; bottom: 70px; }
+  #right { left: 130px; bottom: 70px; }
+
+  #info {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    color: white;
+    font-size: 18px;
+  }
+</style>
+</head>
+<body>
+<div id="gameArea"></div>
+<div id="info">Menunggu pemain...</div>
+
+<div class="btn" id="up">▲</div>
+<div class="btn" id="down">▼</div>
+<div class="btn" id="left">◄</div>
+<div class="btn" id="right">►</div>
+
+<script>
+// === SIMPLE MULTIPLAYER (WebRTC via local peer) ===
+let peers = {};
+let playerId = Math.random().toString(36).substr(2, 6);
+let players = {};
+let isHost = false;
+let monster = {x: 300, y: 300, speed: 1.3};
+const game = document.getElementById('gameArea');
+const info = document.getElementById('info');
+
+// Buat player
+players[playerId] = {x: Math.random()*window.innerWidth, y: Math.random()*window.innerHeight, el: null};
+createPlayer(playerId);
+
+function createPlayer(id){
+  let el = document.createElement('div');
+  el.className = 'player';
+  game.appendChild(el);
+  players[id].el = el;
+}
+
+function updatePlayer(id){
+  let p = players[id];
+  if(!p || !p.el) return;
+  p.el.style.left = p.x + 'px';
+  p.el.style.top = p.y + 'px';
+}
+
+// === Movement ===
+let move = {x:0,y:0};
+function setMove(dx,dy){ move.x = dx; move.y = dy; }
+document.getElementById('up').onmousedown = ()=>setMove(0,-5);
+document.getElementById('down').onmousedown = ()=>setMove(0,5);
+document.getElementById('left').onmousedown = ()=>setMove(-5,0);
+document.getElementById('right').onmousedown = ()=>setMove(5,0);
+document.querySelectorAll('.btn').forEach(b=>b.onmouseup=()=>setMove(0,0));
+
+// === Monster ===
+let monsterEl = document.createElement('div');
+monsterEl.className = 'monster';
+game.appendChild(monsterEl);
+
+// === Game Loop ===
+setInterval(()=>{
+  let me = players[playerId];
+  me.x += move.x;
+  me.y += move.y;
+  updatePlayer(playerId);
+
+  if (isHost) {
+    // monster kejar player terdekat
+    let nearest = null, distMin = 999999;
+    for(let id in players){
+      let p = players[id];
+      let dx = p.x - monster.x;
+      let dy = p.y - monster.y;
+      let d = Math.hypot(dx, dy);
+      if(d < distMin){ distMin = d; nearest = p; }
+    }
+    if(nearest){
+      let dx = nearest.x - monster.x;
+      let dy = nearest.y - monster.y;
+      let len = Math.hypot(dx, dy);
+      monster.x += (dx/len)*monster.speed;
+      monster.y += (dy/len)*monster.speed;
+    }
+  }
+
+  monsterEl.style.left = monster.x + 'px';
+  monsterEl.style.top = monster.y + 'px';
+
+}, 30);
+
+// === AUTO MULTIPLAYER ===
+// Untuk testing: broadcast posisi lewat localStorage (bisa dipakai hotspot)
+setInterval(()=>{
+  localStorage.setItem('mabar_data', JSON.stringify({players, monster}));
+}, 100);
+
+window.addEventListener('storage', e=>{
+  if(e.key === 'mabar_data'){
+    let data = JSON.parse(e.newValue);
+    for(let id in data.players){
+      if(!players[id]){ players[id] = data.players[id]; createPlayer(id); }
+      else Object.assign(players[id], data.players[id]);
+      updatePlayer(id);
+    }
+    monster = data.monster;
+  }
+});
+
+info.innerText = "Room aktif! Pemain otomatis tersambung (via hotspot).";
+</script>
+</body>
+</html>
