@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Halaman Tunggu</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5;
+            text-align: center;
+        }
+
+        #container {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            min-width: 300px;
+        }
+
+        #timer {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #007bff;
+            margin: 20px 0;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+
+<div id="container">
+    <div id="step1">
+        <h3>Mohon tunggu sebentar...</h3>
+        <div id="timer">5</div>
+    </div>
+
+    <div id="step2" class="hidden">
+        <h3>Verifikasi Keamanan</h3>
+        <button onclick="startSecondTimer()">Saya bukan robot</button>
+    </div>
+
+    <div id="step3" class="hidden">
+        <h3>Menyiapkan konten...</h3>
+        <div id="timer2">5</div>
+    </div>
+
+    <div id="step4" class="hidden">
+        <h3>Selesai!</h3>
+        <img src="https://beritajatim.com/wp-content/uploads/2025/01/pengantin-setan.webp" alt="Pengantin Setan">
+    </div>
+</div>
+
+<script>
+    let count1 = 5;
+    let timerElement = document.getElementById('timer');
+
+    // Timer Pertama otomatis jalan saat load
+    const interval1 = setInterval(() => {
+        count1--;
+        timerElement.innerText = count1;
+        if (count1 <= 0) {
+            clearInterval(interval1);
+            document.getElementById('step1').classList.add('hidden');
+            document.getElementById('step2').classList.remove('hidden');
+        }
+    }, 1000);
+
+    // Fungsi untuk Timer Kedua setelah tombol ditekan
+    function startSecondTimer() {
+        document.getElementById('step2').classList.add('hidden');
+        document.getElementById('step3').classList.remove('hidden');
+        
+        let count2 = 5;
+        let timerElement2 = document.getElementById('timer2');
+        
+        const interval2 = setInterval(() => {
+            count2--;
+            timerElement2.innerText = count2;
+            if (count2 <= 0) {
+                clearInterval(interval2);
+                document.getElementById('step3').classList.add('hidden');
+                document.getElementById('step4').classList.remove('hidden');
+            }
+        }, 1000);
+    }
+</script>
+
+</body>
+</html>
