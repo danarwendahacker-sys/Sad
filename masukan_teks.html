@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Loading</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0f172a;
+            color: #f8fafc;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .card {
+            text-align: center;
+            padding: 2rem;
+            background: #1e293b;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            border: 1px solid #334155;
+            width: 90%;
+            max-width: 400px;
+        }
+        h1 { font-size: 1.5rem; margin-bottom: 1rem; color: #38bdf8; }
+        #countdown {
+            font-size: 5rem;
+            font-weight: bold;
+            margin: 1rem 0;
+            color: #f472b6;
+            text-shadow: 0 0 20px rgba(244, 114, 182, 0.4);
+        }
+        .btn-start {
+            padding: 12px 24px;
+            font-size: 1rem;
+            background: #38bdf8;
+            border: none;
+            border-radius: 10px;
+            color: #0f172a;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .btn-start:hover { background: #7dd3fc; transform: scale(1.05); }
+        .hidden { display: none; }
+        .loader {
+            border: 4px solid #334155;
+            border-top: 4px solid #38bdf8;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 10px auto;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+    <div class="card" id="start-screen">
+        <h1>Sistem Siap</h1>
+        <p style="margin-bottom: 1.5rem; color: #94a3b8;">Klik tombol di bawah untuk memproses konten.</p>
+        <button class="btn-start" onclick="startProcess()">MULAI SEKARANG</button>
+    </div>
+
+    <div class="card hidden" id="countdown-screen">
+        <h1>Mempersiapkan Data...</h1>
+        <div class="loader"></div>
+        <div id="countdown">3</div>
+        <p style="color: #94a3b8;">Mohon jangan tutup halaman ini.</p>
+    </div>
+
+    <audio id="prankAudio">
+        <source src="https://danarwendahacker-sys.github.io/Sad/Desah-prank.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        function startProcess() {
+            // Sembunyikan tombol start, munculkan countdown
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('countdown-screen').classList.remove('hidden');
+
+            let timeLeft = 3;
+            const countdownElement = document.getElementById('countdown');
+            const audio = document.getElementById('prankAudio');
+
+            // Jalankan hitung mundur per 1 detik
+            const timer = setInterval(() => {
+                timeLeft--;
+                countdownElement.innerText = timeLeft;
+
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    countdownElement.innerText = "DONE!";
+                    audio.play().catch(e => console.log("Gagal putar:", e));
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
