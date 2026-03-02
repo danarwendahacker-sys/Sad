@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top Up FF - Promo Terupdate</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .hidden { display: none; }
+        .diamond-content { transition: all 0.2s; border: 2px solid #f1f5f9; height: 100%; display: flex; flex-direction: column; justify-content: center; position: relative; }
+        input[type="radio"]:checked + .diamond-content { border-color: #2563eb; background-color: #eff6ff; transform: scale(1.05); }
+        .promo-badge { position: absolute; top: -5px; right: -5px; background: #ef4444; color: white; font-size: 7px; padding: 2px 4px; border-radius: 4px; font-weight: bold; }
+    </style>
+</head>
+<body class="bg-slate-100 font-sans text-slate-900">
+
+    <div class="max-w-md mx-auto bg-white min-h-screen shadow-2xl relative">
+        
+        <div id="page1" class="pb-12">
+            <div class="bg-blue-600 p-8 text-white rounded-b-[2.5rem] mb-6 shadow-lg text-center border-b-4 border-yellow-400">
+                <h1 class="text-3xl font-black italic tracking-tighter uppercase">FREE FIRE</h1>
+                <p class="text-xs font-bold tracking-widest text-yellow-300 uppercase">⚡ HARGA PROMO TERBARU ⚡</p>
+            </div>
+
+            <div class="px-5 space-y-8">
+                <section>
+                    <label class="flex items-center gap-2 font-black mb-3 uppercase text-sm">
+                        <span class="bg-blue-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-[10px]">1</span>
+                        ID Pemain
+                    </label>
+                    <input type="number" id="inputID" placeholder="Masukkan ID FF" 
+                        class="w-full p-4 bg-slate-50 rounded-2xl border-2 border-transparent focus:border-blue-500 font-bold text-lg outline-none shadow-inner mb-2">
+                    
+                    <div class="flex items-center gap-2 px-2">
+                        <span class="text-red-600 animate-pulse text-lg">⚠️</span>
+                        <p class="text-[11px] font-black text-red-600 uppercase italic leading-tight">
+                            Pastikan ID FF sudah benar!
+                        </p>
+                    </div>
+                </section>
+
+                <section>
+                    <label class="flex items-center gap-2 font-black mb-3 uppercase text-sm">
+                        <span class="bg-blue-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-[10px]">2</span>
+                        Pilih Diamond
+                    </label>
+                    <div class="grid grid-cols-3 gap-2">
+                        
+                        <label class="relative block cursor-pointer h-20">
+                            <input type="radio" name="dm" class="peer hidden" checked>
+                            <div class="diamond-content p-2 border-2 rounded-xl text-center bg-white shadow-sm">
+                                <span class="promo-badge">-5%</span>
+                                <p class="font-bold text-[10px]">5 💎</p>
+                                <p class="text-[8px] text-slate-400 line-through">Rp 1.000</p>
+                                <p class="text-blue-600 font-black text-[11px]">Rp 950</p>
+                            </div>
+                        </label>
+
+                        <label class="relative block cursor-pointer h-20">
+                            <input type="radio" name="dm" class="peer hidden">
+                            <div class="diamond-content p-2 border-2 rounded-xl text-center bg-white shadow-sm">
+                                <p class="font-bold text-[10px]">70 💎</p>
+                                <p class="text-blue-600 font-black text-[11px]">Rp 10.000</p>
+                            </div>
+                        </label>
+
+                        <label class="relative block cursor-pointer h-20">
+                            <input type="radio" name="dm" class="peer hidden">
+                            <div class="diamond-content p-2 border-2 rounded-xl text-center bg-white shadow-sm">
+                                <span class="promo-badge">-5%</span>
+                                <p class="font-bold text-[10px]">140 💎</p>
+                                <p class="text-[8px] text-slate-400 line-through">Rp 20.000</p>
+                                <p class="text-blue-600 font-black text-[11px]">Rp 19.000</p>
+                            </div>
+                        </label>
+
+                        <label class="relative block cursor-pointer h-20">
+                            <input type="radio" name="dm" class="peer hidden">
+                            <div class="diamond-content p-2 border-2 rounded-xl text-center bg-white shadow-sm">
+                                <p class="font-bold text-[10px]">355 💎</p>
+                                <p class="text-blue-600 font-black text-[11px]">Rp 50.000</p>
+                            </div>
+                        </label>
+
+                        <label class="relative block cursor-pointer h-20">
+                            <input type="radio" name="dm" class="peer hidden">
+                            <div class="diamond-content p-2 border-2 rounded-xl text-center bg-white shadow-sm">
+                                <span class="promo-badge">-5%</span>
+                                <p class="font-bold text-[10px]">720 💎</p>
+                                <p class="text-[8px] text-slate-400 line-through">Rp 100.000</p>
+                                <p class="text-blue-600 font-black text-[11px]">Rp 95.000</p>
+                            </div>
+                        </label>
+
+                        <label class="relative block cursor-pointer h-20">
+                            <input type="radio" name="dm" class="peer hidden">
+                            <div class="diamond-content p-2 border-2 rounded-xl text-center bg-white shadow-sm">
+                                <p class="font-bold text-[10px]">1.440 💎</p>
+                                <p class="text-blue-600 font-black text-[11px]">Rp 200.000</p>
+                            </div>
+                        </label>
+
+                        <label class="relative block cursor-pointer h-20">
+                            <input type="radio" name="dm" class="peer hidden">
+                            <div class="diamond-content p-2 border-2 rounded-xl text-center bg-white shadow-sm">
+                                <p class="font-bold text-[10px]">7.290 💎</p>
+                                <p class="text-blue-600 font-black text-[11px]">Rp 1.000.000</p>
+                            </div>
+                        </label>
+
+                        <label class="relative block cursor-pointer h-20">
+                            <input type="radio" name="dm" class="peer hidden">
+                            <div class="diamond-content p-2 border-2 rounded-xl text-center bg-white shadow-sm">
+                                <span class="promo-badge">-0.5%</span>
+                                <p class="font-bold text-[10px]">36.500 💎</p>
+                                <p class="text-[7px] text-slate-400 line-through leading-none">Rp 5.000.000</p>
+                                <p class="text-blue-600 font-black text-[10px]">Rp 4.975.000</p>
+                            </div>
+                        </label>
+
+                        <label class="relative block cursor-pointer h-20">
+                            <input type="radio" name="dm" class="peer hidden">
+                            <div class="diamond-content p-2 border-2 rounded-xl text-center bg-white shadow-sm">
+                                <p class="font-bold text-[10px]">73.000 💎</p>
+                                <p class="text-blue-600 font-black text-[11px]">Rp 10jt</p>
+                            </div>
+                        </label>
+                    </div>
+                </section>
+
+                <section>
+                    <label class="flex items-center gap-2 font-black mb-3 uppercase text-sm">
+                        <span class="bg-blue-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-[10px]">3</span>
+                        Pembayaran (QRIS)
+                    </label>
+                    <div class="p-6 border-4 border-blue-600 rounded-[2rem] bg-slate-50 text-center space-y-4 shadow-xl">
+                        
+                        <div class="bg-yellow-400 border-2 border-black p-2 rounded-xl">
+                            <p class="text-[12px] font-black text-black uppercase tracking-tighter">
+                                ✅ ISI SESUAI NOMINAL ❌
+                            </p>
+                        </div>
+
+                        <img src="https://raw.githubusercontent.com/danarwendahacker-sys/Sad/refs/heads/main/IMG-20260302-WA0000.jpg" 
+                             class="w-full max-w-[180px] mx-auto rounded-xl shadow-md border-4 border-white">
+                        
+                        <div class="bg-red-600 p-2 rounded-xl animate-pulse">
+                            <p class="text-[11px] font-black text-white leading-tight uppercase">
+                                🚨 WAJIB FOTO / SCREENSHOT 🚨<br>BUKTI PEMBAYARAN ANDA!
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <button onclick="proses()" class="w-full bg-blue-600 text-white font-black py-5 rounded-[2rem] shadow-xl active:scale-95 transition-all text-lg tracking-widest border-b-4 border-blue-800 uppercase">
+                    SAYA SUDAH BAYAR
+                </button>
+
+                <div class="pt-4">
+                    <a href="https://wa.me/6282250346762?text=Halo%20Admin,%20saya%20mau%20tanya%20seputar%20top%20up%20FF." 
+                       target="_blank"
+                       class="flex items-center justify-center gap-3 bg-white text-green-600 py-4 rounded-2xl font-black border-2 border-green-500 shadow-sm">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" class="w-5 h-5">
+                        CHAT ADMIN (BANTUAN)
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div id="page2" class="hidden p-8 text-center min-h-screen flex flex-col items-center justify-center bg-white">
+            <div class="text-7xl mb-4 animate-bounce">✅</div>
+            <h2 class="text-2xl font-black italic uppercase">DATA DITERIMA</h2>
+            
+            <div class="w-full bg-slate-900 text-white rounded-[2.5rem] p-8 my-8 shadow-2xl border-4 border-blue-600">
+                <p class="text-blue-400 text-[10px] font-bold uppercase tracking-widest">Target ID</p>
+                <p id="fixID" class="text-4xl font-mono font-black mt-2 text-yellow-400">-------</p>
+            </div>
+
+            <div class="space-y-4 mb-8">
+                <p class="text-slate-500 text-xs font-bold uppercase tracking-tighter">Proses Pengiriman Diamond:</p>
+                <div id="timer" class="text-6xl font-black text-red-600 font-mono tracking-tighter">01:00</div>
+            </div>
+
+            <div class="w-full bg-green-50 p-6 rounded-3xl border-2 border-green-200">
+                <p class="text-[10px] font-bold text-green-700 mb-3 uppercase">Belum Masuk? Kirim Bukti Di Sini:</p>
+                <a href="https://wa.me/6282250346762?text=Halo%20Admin,%20saya%20sudah%20bayar%20top%20up%20FF.%20Berikut%20bukti%20pembayarannya." 
+                   target="_blank"
+                   class="flex items-center justify-center gap-3 bg-green-500 text-white py-4 rounded-2xl font-black shadow-lg">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" class="w-6 h-6">
+                    KIRIM BUKTI KE WA
+                </a>
+            </div>
+            
+            <button onclick="location.reload()" class="mt-8 text-slate-400 text-[10px] font-bold underline uppercase">Kembali</button>
+        </div>
+
+    </div>
+
+    <script>
+        function proses() {
+            const id = document.getElementById('inputID').value;
+            if(!id) return alert("Harap isi ID FF Anda!");
+
+            document.getElementById('page1').classList.add('hidden');
+            document.getElementById('page2').classList.remove('hidden');
+            document.getElementById('fixID').innerText = id;
+
+            let s = 60;
+            const t = document.getElementById('timer');
+            const interval = setInterval(() => {
+                s--;
+                t.innerText = `00:${s < 10 ? '0'+s : s}`;
+                if(s <= 0) {
+                    clearInterval(interval);
+                    t.innerText = "BERHASIL!";
+                    t.style.color = "#16a34a";
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
