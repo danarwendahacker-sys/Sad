@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Zombie Chase - Multiplayer Game</title>
+    <style>
+        * {
+            user-select: none;
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0a0f1e 0%, #0e1a2a 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', 'Poppins', 'Press Start 2P', cursive, system-ui;
+            overflow: hidden;
+        }
+
+        .game-container {
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 32px;
+            padding: 20px;
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(4px);
+        }
+
+        canvas {
+            display: block;
+            margin: 0 auto;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            cursor: none;
+            background-color: #1a2a32;
+        }
+
+        /* Lobby Panel */
+        .lobby-panel {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 380px;
+            background: rgba(20, 25, 45, 0.95);
+            backdrop-filter: blur(12px);
+            border-radius: 32px;
+            padding: 28px 24px;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            box-shadow: 0 25px 40px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+            z-index: 20;
+            font-family: 'Segoe UI', system-ui;
+        }
+
+        .lobby-panel h2 {
+            text-align: center;
+            margin: 0 0 8px 0;
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffd966, #ff9966);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 1px;
+        }
+
+        .sub {
+            text-align: center;
+            color: #aaa;
+            font-size: 13px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid #333;
+            display: inline-block;
+            width: 100%;
+            padding-bottom: 8px;
+        }
+
+        .player-name-input {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .player-name-input input {
+            flex: 1;
+            background: #0f121f;
+            border: 1px solid #2c3e55;
+            padding: 12px 16px;
+            border-radius: 60px;
+            color: white;
+            font-size: 16px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        .player-name-input input:focus {
+            border-color: #ff9966;
+            box-shadow: 0 0 8px rgba(255, 153, 102, 0.4);
+        }
+
+        .player-name-input button {
+            background: #2c3e66;
+            border: none;
+            border-radius: 60px;
+            padding: 0 20px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .player-list {
+            background: #0a0e17;
+            border-radius: 24px;
+            padding: 12px;
+            margin-bottom: 24px;
+            max-height: 220px;
+            overflow-y: auto;
+        }
+
+        .player-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 16px;
+            margin: 6px 0;
+            background: #151e2c;
+            border-radius: 40px;
+            border-left: 4px solid #ff9966;
+            font-weight: 500;
+        }
+
+        .player-name {
+            color: #eef;
+        }
+
+        .player-badge {
+            font-size: 12px;
+            background: #ff6644;
+            padding: 4px 10px;
+            border-radius: 30px;
+            font-weight: bold;
+        }
+
+        .host-badge {
+            background: #f0b27a;
+            color: #1e1a1a;
+        }
+
+        .start-btn {
+            width: 100%;
+            background: linear-gradient(95deg, #e67e22, #f39c12);
+            border: none;
+            padding: 14px;
+            border-radius: 60px;
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.1s, filter 0.2s;
+            box-shadow: 0 6px 0 #b45f1b;
+        }
+
+        .start-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 3px 0 #b45f1b;
+        }
+
+        .start-btn.disabled {
+            opacity: 0.5;
+            transform: none;
+            cursor: not-allowed;
+        }
+
+        .info-text {
+            text-align: center;
+            font-size: 12px;
+            color: #aaa;
+            margin-top: 16px;
+        }
+
+        .game-ui {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            pointer-events: none;
+            z-index: 15;
+            display: flex;
+            justify-content: space-between;
+            font-family: monospace;
+            font-weight: bold;
+            text-shadow: 2px 2px 0 black;
+        }
+
+        .role-card {
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(4px);
+            padding: 8px 18px;
+            border-radius: 40px;
+            font-size: 14px;
+            letter-spacing: 1px;
+            color: white;
+            border-left: 4px solid #ffaa44;
+        }
+
+        .score-board {
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(4px);
+            padding: 8px 18px;
+            border-radius: 40px;
+            font-size: 14px;
+        }
+
+        .controls-tip {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0,0,0,0.6);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: #ccc;
+            pointer-events: none;
+            font-family: monospace;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            100% { opacity: 1; }
+        }
+    </style>
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+<div class="game-container">
+    <canvas id="gameCanvas" width="1000" height="600" style="width:1000px; height:600px"></canvas>
+</div>
+
+<!-- Lobby UI -->
+<div id="lobbyPanel" class="lobby-panel">
+    <h2>🧟 ZOMBIE CHASE 🧠</h2>
+    <div class="sub">★ Among Us Style Lobby ★</div>
+    <div class="player-name-input">
+        <input type="text" id="playerNameInput" maxlength="12" placeholder="Nama Karakter" value="Crew">
+        <button id="setNameBtn">Ganti</button>
+    </div>
+    <div class="player-list" id="playerList">
+        <div style="text-align:center; color:#888">Menunggu pemain...</div>
+    </div>
+    <button id="startGameBtn" class="start-btn">▶ MULAI GAME</button>
+    <div class="info-text">📡 Terhubung ke host • Wifi sama untuk join<br>⚡ Host bisa start game</div>
+</div>
+
+<!-- In-game UI -->
+<div id="gameUI" class="game-ui" style="display: none;">
+    <div class="role-card" id="roleDisplay">👤 Loading...</div>
+    <div class="score-board" id="scoreBoard">🧟 0  |  🧑 0</div>
+</div>
+<div class="controls-tip" id="controlsTip">⬆️⬇️⬅️➡️  atau  WASD  |  Hindari zombie!</div>
+
+<script>
+    (function(){
+        // -------- GLOBALS ----------
+        const socket = io();  // koneksi ke server otomatis
+        let localPlayerId = null;
+        let playersMap = new Map();   // { id: { id, name, x, y, isZombie, ... } }
+        let gameActive = false;
+        let isHost = false;
+        let canvas = document.getElementById('gameCanvas');
+        let ctx = canvas.getContext('2d');
+        
+        // movement direction
+        let moveDirection = { dx: 0, dy: 0 };
+        let keys = { ArrowUp: false, ArrowDown: false, ArrowLeft: false, ArrowRight: false, w: false, s: false, a: false, d: false };
+        
+        // camera / viewport
+        let cameraX = 0, cameraY = 0;
+        const MAP_SIZE = 2200;     // dunia 2200x2200
+        const PLAYER_RADIUS = 20;
+        
+        // UI elements
+        const lobbyPanel = document.getElementById('lobbyPanel');
+        const gameUIDiv = document.getElementById('gameUI');
+        const playerListDiv = document.getElementById('playerList');
+        const startBtn = document.getElementById('startGameBtn');
+        const setNameBtn = document.getElementById('setNameBtn');
+        const playerNameInput = document.getElementById('playerNameInput');
+        const roleDisplaySpan = document.getElementById('roleDisplay');
+        const scoreBoardSpan = document.getElementById('scoreBoard');
+        
+        // ----- Helper Functions -----
+        function updateLobbyUI(playersArray, hostId) {
+            if (!playersArray) return;
+            playerListDiv.innerHTML = '';
+            if(playersArray.length === 0) {
+                playerListDiv.innerHTML = '<div style="text-align:center; color:#888">Tidak ada pemain</div>';
+                return;
+            }
+            playersArray.forEach(p => {
+                const div = document.createElement('div');
+                div.className = 'player-item';
+                const nameSpan = document.createElement('span');
+                nameSpan.className = 'player-name';
+                nameSpan.innerText = p.name;
+                const badgeSpan = document.createElement('span');
+                if(p.id === hostId) {
+                    badgeSpan.className = 'player-badge host-badge';
+                    badgeSpan.innerText = '👑 HOST';
+                } else {
+                    badgeSpan.className = 'player-badge';
+                    badgeSpan.innerText = '🧑‍🚀';
+                }
+                div.appendChild(nameSpan);
+                div.appendChild(badgeSpan);
+                playerListDiv.appendChild(div);
+            });
+        }
+        
+        function updateStartButton() {
+            if(!gameActive && isHost) {
+                startBtn.disabled = false;
+                startBtn.classList.remove('disabled');
+                startBtn.innerText = '▶ MULAI GAME';
+            } else if(!gameActive && !isHost) {
+                startBtn.disabled = true;
+                startBtn.classList.add('disabled');
+                startBtn.innerText = '⏳ TUNGGU HOST';
+            } else {
+                startBtn.disabled = true;
+                startBtn.classList.add('disabled');
+                startBtn.innerText = '🎮 BERMAIN...';
+            }
+        }
+        
+        function updateGameStats() {
+            if(!gameActive) return;
+            let survivors = 0, zombies = 0;
+            for(let p of playersMap.values()) {
+                if(p.isZombie) zombies++;
+                else survivors++;
+            }
+            scoreBoardSpan.innerText = `🧟 ${zombies}  |  🧑 ${survivors}`;
+            const myPlayer = playersMap.get(localPlayerId);
+            if(myPlayer) {
+                if(myPlayer.isZombie) roleDisplaySpan.innerHTML = '🧟‍♂️ ZOMBIE - KEJAR YANG LAIN!';
+                else roleDisplaySpan.innerHTML = '🧑‍🚀 CREW - LARI DARI ZOMBIE!';
+            }
+        }
+        
+        // handle movement from keyboard
+        function updateDirection() {
+            let dx = 0, dy = 0;
+            if (keys.ArrowUp || keys.w) dy -= 1;
+            if (keys.ArrowDown || keys.s) dy += 1;
+            if (keys.ArrowLeft || keys.a) dx -= 1;
+            if (keys.ArrowRight || keys.d) dx += 1;
+            if (dx !== 0 || dy !== 0) {
+                const len = Math.hypot(dx, dy);
+                dx /= len;
+                dy /= len;
+            }
+            if (moveDirection.dx !== dx || moveDirection.dy !== dy) {
+                moveDirection = { dx, dy };
+                socket.emit('move', moveDirection);
+            }
+        }
+        
+        // render game canvas
+        function renderGame() {
+            if(!canvas || !ctx) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // draw grid / background
+            ctx.fillStyle = '#1a3129';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            // draw map border (dotted)
+            ctx.strokeStyle = '#4a6a5a';
+            ctx.lineWidth = 4;
+            ctx.strokeRect(0 - cameraX, 0 - cameraY, MAP_SIZE, MAP_SIZE);
+            // draw subtle grid
+            ctx.beginPath();
+            ctx.strokeStyle = '#2f5544';
+            ctx.lineWidth = 1;
+            for(let i = 0; i < MAP_SIZE; i += 200) {
+                ctx.moveTo(i - cameraX, 0 - cameraY);
+                ctx.lineTo(i - cameraX, MAP_SIZE - cameraY);
+                ctx.moveTo(0 - cameraX, i - cameraY);
+                ctx.lineTo(MAP_SIZE - cameraX, i - cameraY);
+                ctx.stroke();
+            }
+            
+            // draw all players
+            for(let [id, player] of playersMap.entries()) {
+                const screenX = player.x - cameraX;
+                const screenY = player.y - cameraY;
+                // shadow
+                ctx.shadowBlur = 8;
+                ctx.shadowColor = "rgba(0,0,0,0.5)";
+                // body
+                if(player.isZombie) {
+                    ctx.fillStyle = '#3c2f2f';
+                    ctx.beginPath();
+                    ctx.arc(screenX, screenY, PLAYER_RADIUS, 0, Math.PI*2);
+                    ctx.fill();
+                    ctx.fillStyle = '#611f1f';
+                    ctx.beginPath();
+                    ctx.arc(screenX-3, screenY-3, 5, 0, Math.PI*2);
+                    ctx.arc(screenX+3, screenY-3, 5, 0, Math.PI*2);
+                    ctx.fill();
+                    ctx.fillStyle = '#ff4444';
+                    ctx.beginPath();
+                    ctx.ellipse(screenX, screenY+2, 8, 5, 0, 0, Math.PI*2);
+                    ctx.fill();
+                } else {
+                    // survivor
+                    ctx.fillStyle = '#4f9da6';
+                    ctx.beginPath();
+                    ctx.arc(screenX, screenY, PLAYER_RADIUS, 0, Math.PI*2);
+                    ctx.fill();
+                    ctx.fillStyle = '#ffffff';
+                    ctx.beginPath();
+                    ctx.arc(screenX-4, screenY-5, 4, 0, Math.PI*2);
+                    ctx.arc(screenX+4, screenY-5, 4, 0, Math.PI*2);
+                    ctx.fill();
+                    ctx.fillStyle = '#3b2b2b';
+                    ctx.beginPath();
+                    ctx.arc(screenX-4, screenY-5, 2, 0, Math.PI*2);
+                    ctx.arc(screenX+4, screenY-5, 2, 0, Math.PI*2);
+                    ctx.fill();
+                    ctx.fillStyle = '#ffaa77';
+                    ctx.beginPath();
+                    ctx.ellipse(screenX, screenY+4, 6, 4, 0, 0, Math.PI*2);
+                    ctx.fill();
+                }
+                // name label
+                ctx.font = "bold 14px 'Segoe UI'";
+                ctx.fillStyle = '#ffffff';
+                ctx.shadowBlur = 3;
+                ctx.fillText(player.name, screenX - 30, screenY - 22);
+                // zombie / crew indicator
+                if(player.isZombie) {
+                    ctx.fillStyle = '#ff5555';
+                    ctx.font = "bold 12px monospace";
+                    ctx.fillText("🧟 ZOMBIE", screenX-32, screenY-35);
+                } else {
+                    ctx.fillStyle = '#aaffdd';
+                    ctx.font = "12px monospace";
+                    ctx.fillText("🧑 CREW", screenX-28, screenY-35);
+                }
+            }
+            ctx.shadowBlur = 0;
+            // local player highlight circle
+            const localPlayer = playersMap.get(localPlayerId);
+            if(localPlayer) {
+                const screenX = localPlayer.x - cameraX;
+                const screenY = localPlayer.y - cameraY;
+                ctx.beginPath();
+                ctx.arc(screenX, screenY, PLAYER_RADIUS+3, 0, Math.PI*2);
+                ctx.strokeStyle = '#ffdd88';
+                ctx.lineWidth = 2.5;
+                ctx.stroke();
+            }
+        }
+        
+        function updateCamera() {
+            const myPlayer = playersMap.get(localPlayerId);
+            if(myPlayer) {
+                let targetX = myPlayer.x - canvas.width/2;
+                let targetY = myPlayer.y - canvas.height/2;
+                targetX = Math.min(Math.max(targetX, 0), MAP_SIZE - canvas.width);
+                targetY = Math.min(Math.max(targetY, 0), MAP_SIZE - canvas.height);
+                cameraX = targetX;
+                cameraY = targetY;
+            }
+        }
+        
+        function animationLoop() {
+            if(gameActive) {
+                updateDirection();  // kirim jika ada perubahan
+                updateCamera();
+                renderGame();
+                updateGameStats();
+            } else {
+                // jika game tidak aktif, tampilkan lobby diatas canvas tapi kita tetap render sederhana
+                if(playersMap.size > 0) renderGame();
+                else {
+                    ctx.fillStyle = '#0e1a2a';
+                    ctx.fillRect(0,0,canvas.width,canvas.height);
+                    ctx.fillStyle = 'white';
+                    ctx.font = "24px monospace";
+                    ctx.fillText("Menunggu di lobby...", canvas.width/2-150, canvas.height/2);
+                }
+            }
+            requestAnimationFrame(animationLoop);
+        }
+        
+        // ----- SOCKET EVENTS -----
+        socket.on('connect', () => {
+            console.log('Connected to server, id:', socket.id);
+            // minta set nama default
+            let defaultName = playerNameInput.value.trim();
+            if(defaultName === "") defaultName = "Crew"+Math.floor(Math.random()*900);
+            socket.emit('setName', defaultName);
+            playerNameInput.value = defaultName;
+        });
+        
+        socket.on('init', (data) => {
+            localPlayerId = data.yourId;
+            isHost = data.isHost;
+            playersMap.clear();
+            data.players.forEach(p => playersMap.set(p.id, p));
+            gameActive = data.gameActive;
+            if(gameActive) {
+                lobbyPanel.style.display = 'none';
+                gameUIDiv.style.display = 'flex';
+            } else {
+                lobbyPanel.style.display = 'block';
+                gameUIDiv.style.display = 'none';
+            }
+            updateLobbyUI(data.players, data.hostId);
+            updateStartButton();
+        });
+        
+        socket.on('lobbyUpdate', (data) => {
+            playersMap.clear();
+            data.players.forEach(p => playersMap.set(p.id, p));
+            gameActive = data.gameActive;
+            isHost = (data.hostId === localPlayerId);
+            if(!gameActive) {
+                lobbyPanel.style.display = 'block';
+                gameUIDiv.style.display = 'none';
+            } else {
+                lobbyPanel.style.display = 'none';
+                gameUIDiv.style.display = 'flex';
+            }
+            updateLobbyUI(data.players, data.hostId);
+            updateStartButton();
+        });
+        
+        socket.on('gameStarted', (gameState) => {
+            gameActive = true;
+            playersMap.clear();
+            gameState.players.forEach(p => playersMap.set(p.id, p));
+            lobbyPanel.style.display = 'none';
+            gameUIDiv.style.display = 'flex';
+            updateStartButton();
+            updateGameStats();
+        });
+        
+        socket.on('gameState', (playersArray) => {
+            playersMap.clear();
+            playersArray.forEach(p => playersMap.set(p.id, p));
+            if(gameActive) updateGameStats();
+        });
+        
+        socket.on('gameEnded', (reason) => {
+            gameActive = false;
+            lobbyPanel.style.display = 'block';
+            gameUIDiv.style.display = 'none';
+            updateStartButton();
+            alert("⚠️ GAME OVER! " + reason + " ⚠️\nHost bisa memulai ulang.");
+        });
+        
+        socket.on('errorMessage', (msg) => {
+            alert(msg);
+        });
+        
+        // ----- UI BUTTONS -----
+        setNameBtn.onclick = () => {
+            let newName = playerNameInput.value.trim();
+            if(newName.length === 0) newName = "Crew";
+            socket.emit('setName', newName);
+        };
+        
+        startBtn.onclick = () => {
+            if(!gameActive && isHost) {
+                socket.emit('startGame');
+            }
+        };
+        
+        // ----- Keyboard Movement -----
+        function handleKeyDown(e) {
+            const key = e.key;
+            if (key === 'ArrowUp' || key === 'ArrowDown' || key === 'ArrowLeft' || key === 'ArrowRight' ||
+                key === 'w' || key === 's' || key === 'a' || key === 'd') {
+                e.preventDefault();
+            }
+            if (keys.hasOwnProperty(key)) keys[key] = true;
+            if (key === 'w') keys.w = true;
+            if (key === 's') keys.s = true;
+            if (key === 'a') keys.a = true;
+            if (key === 'd') keys.d = true;
+            updateDirection();
+        }
+        
+        function handleKeyUp(e) {
+            const key = e.key;
+            if (keys.hasOwnProperty(key)) keys[key] = false;
+            if (key === 'w') keys.w = false;
+            if (key === 's') keys.s = false;
+            if (key === 'a') keys.a = false;
+            if (key === 'd') keys.d = false;
+            updateDirection();
+        }
+        
+        window.addEventListener('keydown', handleKeyDown);
+        window.addEventListener('keyup', handleKeyUp);
+        
+        // start animation
+        animationLoop();
+        
+        // resize handling sederhana (canvas tetap)
+        function handleCanvasSize() {
+            // fixed size
+        }
+        window.addEventListener('resize', handleCanvasSize);
+        
+        // tambahan untuk disconnect visibility
+        socket.on('disconnect', () => {
+            alert("Koneksi terputus dari server. Refresh halaman.");
+            lobbyPanel.style.display = 'block';
+            gameUIDiv.style.display = 'none';
+        });
+    })();
+</script>
+</body>
+</html>
