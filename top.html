@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>SYTEAM Top Up | FF Diamond Store + Admin Rp200</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;600;700&family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            background: radial-gradient(ellipse at 20% 30%, #0a0f2a, #03050b);
+            min-height: 100vh;
+            color: #eef5ff;
+            position: relative;
+            overflow-x: hidden;
+        }
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: twinkle 3s infinite alternate;
+        }
+        @keyframes twinkle {
+            0% { opacity: 0.2; transform: scale(1);}
+            100% { opacity: 1; transform: scale(1.2);}
+        }
+        .nebula {
+            position: fixed;
+            top: -20%;
+            right: -10%;
+            width: 80%;
+            height: 80%;
+            background: radial-gradient(circle, rgba(0,100,255,0.2) 0%, rgba(0,20,80,0) 70%);
+            filter: blur(70px);
+            pointer-events: none;
+            z-index: 0;
+        }
+        .nebula2 {
+            bottom: -10%;
+            left: -15%;
+            top: auto;
+            width: 90%;
+            height: 70%;
+            background: radial-gradient(circle, rgba(70,130,255,0.2) 0%, rgba(0,0,0,0) 80%);
+            filter: blur(90px);
+            position: fixed;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 3rem;
+        }
+        .store-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .brand {
+            font-family: 'Orbitron', monospace;
+            font-size: 2.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ffffff, #4d9eff, #1a5cff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 10px rgba(0,100,255,0.5);
+        }
+        .brand span {
+            background: none;
+            color: #3b82f6;
+        }
+        .sub {
+            font-size: 1rem;
+            letter-spacing: 2px;
+            color: #aac9ff;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            display: inline-block;
+            padding: 0.3rem 1.2rem;
+            border-radius: 40px;
+            margin-top: 0.8rem;
+            border: 1px solid rgba(59,130,246,0.4);
+        }
+        .admin-badge {
+            background: linear-gradient(135deg, #ff9a3c, #d45400);
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-top: 12px;
+            box-shadow: 0 0 8px rgba(255,100,0,0.5);
+        }
+        .packages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+            gap: 1.8rem;
+            margin: 2rem 0 2rem;
+        }
+        .card {
+            background: rgba(8, 12, 30, 0.65);
+            backdrop-filter: blur(12px);
+            border-radius: 32px;
+            border: 1px solid rgba(0, 150, 255, 0.3);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5), 0 0 12px rgba(0, 120, 255, 0.2);
+            transition: all 0.3s ease;
+            padding: 1.8rem 1rem 1.5rem;
+            text-align: center;
+            position: relative;
+        }
+        .card:hover {
+            transform: translateY(-8px);
+            border-color: #2b7fff;
+            box-shadow: 0 20px 35px rgba(0, 80, 255, 0.3), 0 0 20px rgba(0, 160, 255, 0.5);
+        }
+        .diamond-icon {
+            font-size: 2.6rem;
+            color: #7bc9ff;
+            text-shadow: 0 0 10px #0077ff;
+            margin-bottom: 0.5rem;
+        }
+        .dm-amount {
+            font-size: 2.2rem;
+            font-weight: 800;
+            font-family: 'Orbitron', monospace;
+            background: linear-gradient(135deg, #E0F2FE, #38bdf8);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .price-rp {
+            margin: 0.8rem 0 0.2rem;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #f0f3ff;
+        }
+        .price-rp small {
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: #b0d4ff;
+        }
+        .admin-info {
+            font-size: 0.8rem;
+            background: rgba(255, 100, 0, 0.2);
+            color: #ffb347;
+            padding: 4px 10px;
+            border-radius: 50px;
+            display: inline-block;
+            margin: 8px 0;
+        }
+        .per-user-note {
+            font-size: 0.7rem;
+            background: rgba(0,0,0,0.5);
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 30px;
+            color: #b9e2ff;
+            margin-bottom: 1rem;
+            border: 0.5px solid #2b6eff;
+        }
+        .btn-topup {
+            background: linear-gradient(95deg, #001f3f, #00337c);
+            border: none;
+            color: white;
+            font-weight: bold;
+            font-size: 1rem;
+            padding: 0.75rem 0;
+            width: 85%;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: 'Inter', sans-serif;
+            box-shadow: 0 4px 12px rgba(0, 50, 150, 0.4);
+            border: 1px solid rgba(0,160,255,0.5);
+        }
+        .btn-topup:hover {
+            background: linear-gradient(95deg, #0044aa, #0066dd);
+            box-shadow: 0 0 12px #0080ff;
+        }
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.88);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            visibility: hidden;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        .modal-overlay.active {
+            visibility: visible;
+            opacity: 1;
+        }
+        .modal-content {
+            background: rgba(5, 10, 25, 0.96);
+            backdrop-filter: blur(20px);
+            border-radius: 48px;
+            max-width: 500px;
+            width: 90%;
+            padding: 1.8rem 1.5rem 2rem;
+            text-align: center;
+            border: 1px solid #2b6eff;
+            box-shadow: 0 0 40px rgba(0,100,255,0.5);
+            animation: floatModal 0.3s ease;
+        }
+        @keyframes floatModal {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .modal-header {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #5dade2;
+            margin-bottom: 0.5rem;
+        }
+        .input-group {
+            margin: 1.5rem 0;
+            text-align: left;
+        }
+        .input-group label {
+            font-weight: 600;
+            display: block;
+            margin-bottom: 8px;
+            color: #bbd9ff;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 14px 18px;
+            border-radius: 60px;
+            border: 1px solid #3b82f6;
+            background: rgba(0, 10, 30, 0.8);
+            color: white;
+            font-size: 1rem;
+            outline: none;
+        }
+        .warning-note {
+            background: rgba(255, 80, 40, 0.2);
+            border-left: 4px solid #ffaa33;
+            padding: 12px;
+            border-radius: 16px;
+            margin: 15px 0;
+            font-size: 0.85rem;
+            color: #ffdd99;
+            text-align: left;
+        }
+        .btn-primary {
+            background: linear-gradient(95deg, #0055aa, #0080ff);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 60px;
+            font-weight: bold;
+            color: white;
+            width: 100%;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+        .btn-secondary {
+            background: rgba(50, 70, 120, 0.7);
+            border: 1px solid #3b82f6;
+            padding: 10px 20px;
+            border-radius: 40px;
+            color: white;
+            cursor: pointer;
+            margin-top: 12px;
+            width: 100%;
+        }
+        .qris-container {
+            background: white;
+            padding: 1rem;
+            border-radius: 28px;
+            margin: 1rem 0;
+            display: inline-block;
+            width: 100%;
+            max-width: 260px;
+            box-shadow: 0 0 0 3px #001a4d, 0 0 0 6px #002c6e;
+        }
+        .qris-img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 16px;
+        }
+        .pay-amount {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #ffd966;
+        }
+        .detail-box {
+            background: #0a1022;
+            border-radius: 24px;
+            padding: 14px;
+            margin: 10px 0;
+        }
+        .footer-note {
+            text-align: center;
+            margin-top: 3rem;
+            font-size: 0.75rem;
+            opacity: 0.7;
+            border-top: 1px solid rgba(59,130,246,0.3);
+            padding-top: 1.5rem;
+        }
+        @media (max-width: 640px) {
+            .brand { font-size: 2rem; }
+            .dm-amount { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="stars" id="starsContainer"></div>
+<div class="nebula"></div>
+<div class="nebula2"></div>
+
+<div class="container">
+    <div class="store-header">
+        <div class="brand">[SYTEAM <span>top up</span>]</div>
+        <div class="sub"><i class="fas fa-crown"></i> Top Up Diamond FF • QRIS Resmi</div>
+        <div class="admin-badge"><i class="fas fa-receipt"></i> + Biaya Admin Rp200 (ditambahkan saat pembayaran)</div>
+    </div>
+    <div class="packages-grid" id="packagesGrid"></div>
+    <div class="footer-note">
+        <i class="fas fa-camera"></i> <strong>Pembayaran WAJIB di FOTO</strong> sebagai bukti.<br>
+        <i class="fab fa-whatsapp"></i> Konfirmasi via WhatsApp setelah bayar & foto bukti.<br>
+        ⚡ SYTEAM Top Up — Aman, Cepat & Terpercaya
+    </div>
+</div>
+
+<!-- MODAL INPUT ID FF -->
+<div id="idModal" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <i class="fas fa-id-card"></i> Masukkan ID FF
+        </div>
+        <div class="input-group">
+            <label><i class="fab fa-free-fire"></i> Free Fire ID</label>
+            <input type="text" id="ffIdInput" placeholder="Contoh: 1234567890" autocomplete="off">
+        </div>
+        <div class="warning-note">
+            <i class="fas fa-exclamation-triangle"></i> <strong>⚠️ PERINGATAN ⚠️</strong><br>
+            • Pastikan ID FF benar.<br>
+            • <strong>Biaya admin Rp200 akan ditambahkan</strong> saat pembayaran.<br>
+            • Transfer <strong>sesuai TOTAL yang tertera di halaman QRIS</strong> (harga paket + Rp200).<br>
+            • <strong>WAJIB FOTO BUKTI PEMBAYARAN</strong> setelah transfer.
+        </div>
+        <button class="btn-primary" id="submitIdBtn"><i class="fas fa-arrow-right"></i> Lanjut ke Pembayaran</button>
+        <button class="btn-secondary" id="closeIdModalBtn"><i class="fas fa-times"></i> Batal</button>
+    </div>
+</div>
+
+<!-- MODAL QRIS + Detail Total (harga paket + admin Rp200) -->
+<div id="qrModal" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <i class="fas fa-qrcode"></i> QRIS Payment
+        </div>
+        <div class="detail-box">
+            <p><i class="fas fa-gem"></i> <strong id="modalDM">0 DM</strong></p>
+            <p><i class="fas fa-tag"></i> Harga Paket: <span id="modalPrice">Rp 0</span></p>
+            <p><i class="fas fa-plus-circle"></i> Biaya Admin: <strong style="color:#ffaa33;">Rp 200</strong></p>
+            <p><i class="fas fa-money-bill-wave"></i> <strong>TOTAL YANG HARUS DIBAYAR:</strong><br>
+            <span id="totalPayment" class="pay-amount">Rp 0</span></p>
+            <p><i class="fas fa-user-circle"></i> ID FF: <strong id="displayFFID">-</strong></p>
+        </div>
+        <div class="warning-note" style="font-size:0.8rem;">
+            <i class="fas fa-camera-retro"></i> <strong>📸 WAJIB FOTO BUKTI TRANSFER</strong><br>
+            Transfer <strong>sesuai TOTAL NOMINAL di atas</strong> (harga paket + Rp200).<br>
+            Lalu foto bukti dan klik tombol konfirmasi.
+        </div>
+        <div class="qris-container">
+            <img id="staticQrisImg" class="qris-img" src="https://raw.githubusercontent.com/danarwendahacker-sys/Sad/refs/heads/main/IMG-20260302-WA0000.jpg" alt="QRIS SYTEAM DANA">
+            <div style="margin-top: 10px; font-size:0.7rem; background:#f0f0f0; padding:4px; border-radius:20px; color:black;">
+                <i class="fas fa-mobile-alt"></i> Scan pakai DANA / QRIS
+            </div>
+        </div>
+        <button class="btn-primary" id="confirmWaBtn" style="background: linear-gradient(95deg, #128C7E, #25D366);">
+            <i class="fab fa-whatsapp"></i> Konfirmasi & Kirim ke WA
+        </button>
+        <button class="btn-secondary" id="closeQrModalBtn"><i class="fas fa-times"></i> Tutup</button>
+    </div>
+</div>
+
+<script>
+    // Data paket: DM dan harga dalam Rupiah (1 RB pada data awal = Rp1.000)
+    const packages = [
+        { dm: 14, price: 2000 },   // 2 RB => Rp2.000
+        { dm: 57, price: 9000 },   // 9 RB => Rp9.000
+        { dm: 81, price: 11000 },  // 11 RB => Rp11.000
+        { dm: 101, price: 15000 }, // 15 RB => Rp15.000
+        { dm: 161, price: 21000 }, // 21 RB => Rp21.000
+        { dm: 409, price: 52000 }, // 52 RB => Rp52.000
+        { dm: 828, price: 102000 } // 102 RB => Rp102.000
+    ];
+    const ADMIN_FEE = 200; // Rp200
+
+    let selectedPackage = null;
+    let userFFID = "";
+
+    // Format Rupiah
+    function formatRupiah(angka) {
+        return "Rp " + angka.toLocaleString("id-ID");
+    }
+
+    function renderCards() {
+        const grid = document.getElementById('packagesGrid');
+        if (!grid) return;
+        grid.innerHTML = '';
+        packages.forEach(pkg => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+                <div class="diamond-icon"><i class="fas fa-gem"></i></div>
+                <div class="dm-amount">${pkg.dm}</div>
+                <div class="dm-label">DIAMONDS</div>
+                <div class="price-rp">${formatRupiah(pkg.price)}</div>
+                <div class="admin-info"><i class="fas fa-wallet"></i> + Admin Rp200 (saat bayar)</div>
+                <div class="per-user-note"><i class="fas fa-user-check"></i> Satu kali per user</div>
+                <button class="btn-topup" data-dm="${pkg.dm}" data-price="${pkg.price}"><i class="fas fa-qrcode"></i> Top Up via QRIS</button>
+            `;
+            grid.appendChild(card);
+        });
+        document.querySelectorAll('.btn-topup').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const dm = parseInt(btn.getAttribute('data-dm'));
+                const price = parseInt(btn.getAttribute('data-price'));
+                selectedPackage = { dm, price };
+                openIdModal();
+            });
+        });
+    }
+
+    function createStars() {
+        const starsContainer = document.getElementById('starsContainer');
+        for (let i = 0; i < 300; i++) {
+            const star = document.createElement('div');
+            star.classList.add('star');
+            const size = Math.random() * 3 + 1;
+            star.style.width = `${size}px`;
+            star.style.height = `${size}px`;
+            star.style.left = `${Math.random() * 100}%`;
+            star.style.top = `${Math.random() * 100}%`;
+            star.style.animationDelay = `${Math.random() * 5}s`;
+            star.style.animationDuration = `${Math.random() * 3 + 2}s`;
+            starsContainer.appendChild(star);
+        }
+    }
+
+    const idModal = document.getElementById('idModal');
+    const ffIdInput = document.getElementById('ffIdInput');
+    const submitIdBtn = document.getElementById('submitIdBtn');
+    const closeIdModalBtn = document.getElementById('closeIdModalBtn');
+
+    function openIdModal() {
+        if (!selectedPackage) return;
+        ffIdInput.value = "";
+        idModal.classList.add('active');
+        setTimeout(() => ffIdInput.focus(), 100);
+    }
+    function closeIdModal() { idModal.classList.remove('active'); }
+
+    function processIdAndOpenQr() {
+        let ffId = ffIdInput.value.trim();
+        if (ffId === "") { alert("❌ Masukkan ID Free Fire!"); return; }
+        if (ffId.length < 4) { alert("ID FF minimal 4 karakter."); return; }
+        userFFID = ffId;
+        closeIdModal();
+        openQrModalWithDetails();
+    }
+
+    const qrModal = document.getElementById('qrModal');
+    const modalDM = document.getElementById('modalDM');
+    const modalPrice = document.getElementById('modalPrice');
+    const totalPaymentSpan = document.getElementById('totalPayment');
+    const displayFFIDSpan = document.getElementById('displayFFID');
+    const confirmWaBtn = document.getElementById('confirmWaBtn');
+    const closeQrModalBtn = document.getElementById('closeQrModalBtn');
+
+    function openQrModalWithDetails() {
+        if (!selectedPackage || !userFFID) return;
+        const hargaPaket = selectedPackage.price;
+        const totalBayar = hargaPaket + ADMIN_FEE;
+        modalDM.innerText = `${selectedPackage.dm} DM`;
+        modalPrice.innerText = formatRupiah(hargaPaket);
+        totalPaymentSpan.innerText = formatRupiah(totalBayar);
+        displayFFIDSpan.innerText = userFFID;
+        qrModal.classList.add('active');
+    }
+    function closeQrModal() { qrModal.classList.remove('active'); }
+
+    function sendToWhatsApp() {
+        if (!selectedPackage || !userFFID) return;
+        const totalBayar = selectedPackage.price + ADMIN_FEE;
+        const message = `👤: ${userFFID}\n💎: ${selectedPackage.dm} DM\n💰 Harga Paket: ${formatRupiah(selectedPackage.price)}\n📌 Biaya Admin: Rp 200\n✅ TOTAL BAYAR: ${formatRupiah(totalBayar)}\n\n📸 Saya telah melakukan pembayaran sesuai TOTAL NOMINAL di atas via QRIS. Bukti pembayaran sudah difoto. Mohon diproses.`;
+        const waLink = `https://wa.me/6282250346762?text=${encodeURIComponent(message)}`;
+        window.open(waLink, '_blank');
+        closeQrModal();
+        alert("📱 WhatsApp terbuka. Jangan lupa lampirkan FOTO BUKTI TRANSFER.");
+    }
+
+    submitIdBtn.addEventListener('click', processIdAndOpenQr);
+    closeIdModalBtn.addEventListener('click', closeIdModal);
+    ffIdInput.addEventListener('keypress', e => { if (e.key === 'Enter') processIdAndOpenQr(); });
+    confirmWaBtn.addEventListener('click', sendToWhatsApp);
+    closeQrModalBtn.addEventListener('click', closeQrModal);
+    idModal.addEventListener('click', e => { if (e.target === idModal) closeIdModal(); });
+    qrModal.addEventListener('click', e => { if (e.target === qrModal) closeQrModal(); });
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') {
+            if (idModal.classList.contains('active')) closeIdModal();
+            if (qrModal.classList.contains('active')) closeQrModal();
+        }
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+        createStars();
+        renderCards();
+        const qrisImg = document.getElementById('staticQrisImg');
+        if (qrisImg) qrisImg.onerror = () => console.warn("Gambar QRIS gagal dimuat, tetap gunakan link.");
+        setInterval(() => {
+            const nebulas = document.querySelectorAll('.nebula, .nebula2');
+            nebulas.forEach((neb, idx) => {
+                if (idx === 0) neb.style.transform = `translate(${Math.sin(Date.now() * 0.0005) * 5}px, ${Math.cos(Date.now() * 0.0003) * 3}px)`;
+                else neb.style.transform = `translate(${Math.cos(Date.now() * 0.0004) * 4}px, ${Math.sin(Date.now() * 0.0006) * 4}px)`;
+            });
+        }, 80);
+    });
+</script>
+</body>
+</html>
